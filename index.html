@@ -268,7 +268,7 @@ button{
 <audio id="meme" preload="auto"></audio>
 
 <!-- SECRET MENU -->
-<div id="secretMenu" class="screen center">
+<div id="secretMenu" class="screen center hidden">
     <h2>  wanna access the secret menu?</h2>
     <input type="password" id="codeInput" placeholder="Enter code" autocomplete="off">
     <button onclick="checkCode()">Enter</button>
@@ -296,6 +296,7 @@ const mediaFiles = [
 
 let loadedCount = 0;
 let hasErrors = false;
+let allMediaLoaded = false;
 
 function updateProgress() {
     const percent = (loadedCount / mediaFiles.length) * 100;
@@ -308,9 +309,10 @@ function mediaLoaded() {
     updateProgress();
     
     if (loadedCount >= mediaFiles.length) {
+        allMediaLoaded = true;
         setTimeout(() => {
             document.getElementById('loadingScreen').classList.add('hidden');
-            // Secret menu is already visible, no need to show it again
+            document.getElementById('secretMenu').classList.remove('hidden');
         }, 500);
     }
 }
@@ -331,6 +333,8 @@ mediaFiles.forEach(file => {
             audio.addEventListener('canplaythrough', mediaLoaded);
             audio.addEventListener('error', () => mediaError(file));
             audio.load();
+        } else {
+            mediaError(file);
         }
     } else if (file.type === 'video') {
         let video = document.createElement('video');
@@ -440,7 +444,7 @@ function startChaos() {
         scene.appendChild(cat);
     }
 
-    // Video
+    // Video - set to 1.75x speed
     let video = document.createElement("video");
     video.src = "mbd.mp4";
     video.className = "herVideo";
@@ -448,7 +452,7 @@ function startChaos() {
     video.loop = true;
     video.muted = true;
     video.playsInline = true;
-    video.playbackRate = 1.3;
+    video.playbackRate = 1.75;
     video.onerror = function() {
         this.outerHTML = '<div class="herVideo" style="background:#333; display:flex; align-items:center; justify-content:center; font-size:60px;">🎥</div>';
     };
@@ -550,17 +554,8 @@ function goBackToMain() {
     document.getElementById("secretMenu").classList.remove("hidden");
 }
 
-// Fallback if loading takes too long
-setTimeout(() => {
-    if (loadedCount < mediaFiles.length) {
-        document.getElementById('errorContainer').innerHTML += '⚠️ Loading timeout - continuing anyway...<br>';
-        setTimeout(() => {
-            document.getElementById('loadingScreen').classList.add('hidden');
-            // Secret menu is already visible
-        }, 1000);
-    }
-}, 10000);
+// Remove the timeout fallback that continued anyway
+// No more timeout - we wait for all media to load
 </script>
 </body>
-
 </html>
