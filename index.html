@@ -249,6 +249,13 @@ button{
     margin-top: 10px;
     font-size: 14px;
 }
+
+#codeError {
+    color: #ff6b6b;
+    margin-top: 10px;
+    font-size: 14px;
+    min-height: 20px;
+}
 </style>
 </head>
 
@@ -274,6 +281,7 @@ button{
     <input type="password" id="codeInput" placeholder="Enter code" autocomplete="off">
     <button onclick="checkCode()">Enter</button>
     <button class="secondary" onclick="startMain()">Continue without code for now</button>
+    <div id="codeError"></div>
 </div>
 
 <!-- MAIN SCENE -->
@@ -369,22 +377,44 @@ function stop(id) {
     }
 }
 
-// Code check
+// Code check - changed to "pineapple" with error message
 function checkCode() {
     play("tap");
     const code = document.getElementById("codeInput").value.trim().toLowerCase();
-    if (code === "labubu") {
+    const errorDiv = document.getElementById("codeError");
+    
+    if (code === "pineapple") {
+        errorDiv.innerText = ""; // Clear any previous error
         // Hide secret menu and show confession
         document.getElementById("secretMenu").classList.add("hidden");
         showConfession();
     } else {
-        startMain();
+        errorDiv.innerText = "❌ Incorrect code. Try again!";
+        // Shake animation for visual feedback
+        const input = document.getElementById("codeInput");
+        input.style.animation = "shake 0.5s";
+        setTimeout(() => {
+            input.style.animation = "";
+        }, 500);
     }
 }
+
+// Add shake animation style
+const style = document.createElement('style');
+style.textContent = `
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+    20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+`;
+document.head.appendChild(style);
 
 // Start main timeline
 function startMain() {
     play("tap");
+    // Clear any error message
+    document.getElementById("codeError").innerText = "";
     // Hide secret menu
     document.getElementById("secretMenu").classList.add("hidden");
     // Show main scene
@@ -559,4 +589,3 @@ function goBackToMain() {
 </script>
 </body>
 </html>
-
