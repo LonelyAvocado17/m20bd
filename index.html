@@ -256,6 +256,14 @@ button{
     font-size: 14px;
     min-height: 20px;
 }
+
+/* Success message style */
+.success-message {
+    color: #4CAF50;
+    margin-top: 15px;
+    font-size: 16px;
+    font-weight: bold;
+}
 </style>
 </head>
 
@@ -275,13 +283,14 @@ button{
 <audio id="meme" preload="auto"></audio>
 
 <!-- SECRET MENU -->
-<div id="secretMenu" class="screen center hidden">
-    <h2>  wanna access the secret menu?</h2>
-    <h2>  (turn up your volume)</h2>
+<div id="secretMenu" class="screen center">
+    <h2>Enter code for the main menu?</h2>
+    <h2> (increase volume)</h2>
     <input type="password" id="codeInput" placeholder="Enter code" autocomplete="off">
     <button onclick="checkCode()">Enter</button>
-    <button class="secondary" onclick="startMain()">Continue without code for now</button>
+    <button class="secondary" onclick="startMain()">Continue without code</button>
     <div id="codeError"></div>
+    <div id="codeSuccess" class="success-message"></div>
 </div>
 
 <!-- MAIN SCENE -->
@@ -321,7 +330,7 @@ function mediaLoaded() {
         allMediaLoaded = true;
         setTimeout(() => {
             document.getElementById('loadingScreen').classList.add('hidden');
-            document.getElementById('secretMenu').classList.remove('hidden');
+            // secretMenu is already visible, no need to remove hidden class
         }, 500);
     }
 }
@@ -382,14 +391,31 @@ function checkCode() {
     play("tap");
     const code = document.getElementById("codeInput").value.trim().toLowerCase();
     const errorDiv = document.getElementById("codeError");
+    const successDiv = document.getElementById("codeSuccess");
     
     if (code === "pineapple") {
-        errorDiv.innerText = ""; // Clear any previous error
-        // Hide secret menu and show confession
-        document.getElementById("secretMenu").classList.add("hidden");
+        // Clear error and show success message
+        errorDiv.innerText = "";
+        successDiv.innerText = "✅ Code correct! Scroll down for message ↓";
+        
+        // Hide the confession screen if visible, show main scene
+        document.getElementById("confessionScreen").classList.add("hidden");
+        document.getElementById("scene1").classList.add("hidden");
+        
+        // Show confession but keep menu visible
         showConfession();
+        
+        // Smooth scroll to bottom where confession appears
+        setTimeout(() => {
+            window.scrollTo({
+                top: document.body.scrollHeight,
+                behavior: 'smooth'
+            });
+        }, 300);
+        
     } else {
         errorDiv.innerText = "❌ Incorrect code. Try again!";
+        successDiv.innerText = ""; // Clear any success message
         // Shake animation for visual feedback
         const input = document.getElementById("codeInput");
         input.style.animation = "shake 0.5s";
@@ -413,8 +439,9 @@ document.head.appendChild(style);
 // Start main timeline
 function startMain() {
     play("tap");
-    // Clear any error message
+    // Clear any messages
     document.getElementById("codeError").innerText = "";
+    document.getElementById("codeSuccess").innerText = "";
     // Hide secret menu
     document.getElementById("secretMenu").classList.add("hidden");
     // Show main scene
@@ -434,7 +461,7 @@ function startTimeline() {
     let years = 20;
     let seconds = years * 365 * 24 * 60 * 60;
 
-    text.innerText = `Now, you have been alive for ${years} years...`;
+    text.innerText = `you have been alive for ${years} years...`;
     
     setTimeout(() => {
         text.innerText = `That is ${seconds.toLocaleString()} seconds...`;
@@ -494,7 +521,7 @@ function startChaos() {
     msg.id = "chaosText";
     scene.appendChild(msg);
 
-    const textContent = "Okay It Was Kinda Cringe But I Had To Do It 😂";
+    const textContent = "Okay! It Was Kinda Cringe But I Had To Do It 🤣";
     let index = 0;
     let typing = setInterval(() => {
         if (index < textContent.length) {
@@ -542,27 +569,28 @@ function startReflection() {
     
     const text = document.createElement("div");
     text.className = "reflection-text";
-    text.innerText = "But seriously…\n\nYou're 20 now.\nYour teenage years are officially over.\n\nHow does that feel?\n\n(Give me birthday treat😋👉👈)";
+    text.innerText = "So....\n\nYou're 20 now.\nHow does that feel to you?.\n\nyou're reading this right?\n\nGive me birthday treat😋👉👈";
     scene.appendChild(text);
 }
 
-// Confession
+// Confession - UPDATED WITH YOUR NEW TEXT
 function showConfession() {
     play("tap");
-    document.getElementById("secretMenu").classList.add("hidden");
-    document.getElementById("scene1").classList.add("hidden");
+    
+    // Don't hide the secret menu anymore - let it stay visible
+    // Just show the confession screen below it
+    
     document.getElementById("confessionScreen").classList.remove("hidden");
 
-   const confessionText = `Nice job cracking that Caesar cipher! you're awesome sauce 😋
+    const confessionText = `This is the last menu I swear lol, it's nice that you were able to decrypt that. Now... how do I start? 
 
-Shall I get straight to the point, or keep yapping? Nah… we’ll go straight to the point.
-probably out of nowhere but,
-So… would you like to be my girlfriend? 👉👈
-I really enjoy talking to you like so much and sometimes those mind-sync moments we get? lmaoo. I know it’d be long distance, and I can’t promise everything will be perfect, but I’ll always try my best. I really think we can make it work if we both want to.
+Remember the day your roommates were like it's high time that you confess and all and you were like I am going to the common room lmao, usually i would have had done so but i had this package already sent beforehand. so now i am actually doing it here... 
 
-Take your time to think, no rush. I’ll probably be asleep by the time you read this, so just text me whenever you feel ready.
+Manya, would you like to be my girlfriend? I really like you. Like, more than just as a friend. And honestly… I'm so in love with you 👉👈.
 
-And… that’s it. Menu closed `;
+What do you think of me? You're my twin aswell. I know it'd be long distance, and I can't promise everything will be perfect but i really think we can make it work. 
+
+i guess it would be late enough by the time you read this that i would've slept to avoid anxiety😋 so text me whatever you feel like and we'll talk through it in the morning.`;
 
     const confessionDiv = document.getElementById("confession");
     confessionDiv.innerText = "";
@@ -577,15 +605,15 @@ And… that’s it. Menu closed `;
     }, 30);
 }
 
-// Back button
+// Back button - now just hides confession but keeps menu
 function goBackToMain() {
     play("tap");
     document.getElementById("confessionScreen").classList.add("hidden");
-    document.getElementById("secretMenu").classList.remove("hidden");
+    // Clear success message
+    document.getElementById("codeSuccess").innerText = "";
+    // Clear input
+    document.getElementById("codeInput").value = "";
 }
-
-// Remove the timeout fallback that continued anyway
-// No more timeout - we wait for all media to load
 </script>
 </body>
 </html>
