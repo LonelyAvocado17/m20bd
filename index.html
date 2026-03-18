@@ -276,11 +276,11 @@ button{
 
 <!-- SECRET MENU -->
 <div id="secretMenu" class="screen center hidden">
-    <h2>  wanna access the hidden menu?</h2>
-    <h2>  (turn up your volume)</h2>
+    <h2>  wanna go to the hidden menu?</h2>
+    <h2>  (increase your volume)</h2>
     <input type="password" id="codeInput" placeholder="Enter code" autocomplete="off">
     <button onclick="checkCode()">Enter</button>
-    <button class="secondary" onclick="startMain()">Continue without the code for now</button>
+    <button class="secondary" onclick="startMain()">Continue without the code</button>
     <div id="codeError"></div>
 </div>
 
@@ -350,17 +350,17 @@ const confessionHTML = `<!DOCTYPE html>
 <div id="confession-box"><span id="typed"></span><span class="cursor" id="cursor"></span></div>
 <div class="hearts" id="hearts"></div>
 <script>
-const text = \`This is the last menu I swear lol, it's nice that you were able to decrypt that. Now... how do I start?
+const text = \`This is the last menu I swear lol, it's nice that you were able to decrypt that caeser cipher. Now... how do I start?
 
 Remember that day your roommates were like it's high time that you confess and all and you were like I am going to the common room lmao, usually I would have had done so but I had this box already sent beforehand. So now I am actually doing it here...
 
-Manya, would you like to be my girlfriend? I really like you. Like, more than just as a friend. And honestly… I'm so in love with you 👉👈.
+Manya, would you be my girlfriend? I really like you. Like, more than just as a friend. And honestly… I'm so in love with you 👉👈.
 
 What do you think of me? You think we'd make a good pair?
 
 I know it'd be long distance, and I can't promise everything will be perfect, but I really think we can make it work. No need to rush anything, take your time to decide.
 
-Tell me what is your decision, over text or call anything works\`;
+Tell me what do you feel like, over text or call anything works\`;
 
 const el = document.getElementById("typed");
 const cursor = document.getElementById("cursor");
@@ -508,7 +508,7 @@ function startTimeline() {
     text.innerText = `you have been alive for ${years} years...`;
 
     setTimeout(() => {
-        text.innerText = `That is ${seconds.toLocaleString()} seconds...and......`;
+        text.innerText = `That is 20 complete revolutions around the sun,so....`;
     }, 3000);
 
     setTimeout(() => {
@@ -598,7 +598,7 @@ function startReflection() {
 
     const text = document.createElement("div");
     text.className = "reflection-text";
-    text.innerText = "You dance nice ain't it😋\n\n\nEnjoy rest of the day as well\n\nAlso...\n\nGive me birthday treat😋👉👈";
+    text.innerText = "You dance nice ain't it😋\n\n\nGood luck for your rebeca performance\n\nAlso...\n\nGive me birthday treat😋👉👈";
     scene.appendChild(text);
 }
 </script>
